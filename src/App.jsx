@@ -9,10 +9,16 @@ export default function App() {
     const data = await getQuotes();
     setQuotes(data);
   }
-  
+
   getData();
 
   return (
-    <QuoteCard />
+    <>
+      {quotes.map((quote) =>
+        <div key={quote.quote}>
+          <QuoteCard quote={quote}/>
+        </div>
+      )}
+    </>
   );
 }

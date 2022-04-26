@@ -1,12 +1,12 @@
 import React from 'react';
 import style from './QuoteCard.css';
 
-export default function QuoteCard() {
+export default function QuoteCard({ quote }) {
   return (
     <div className={style.quoteCard}>
-      <p>"Some text that is a quote from Futurama"</p>
-      <img alt="picture of character"></img>
-      <h2>Character Name</h2>
+      <p>{quote.quote}</p>
+      <img alt={`picture of ${quote.character}`} src={quote.image} />
+      <h2>{quote.character.toUpperCase()}</h2>
     </div>
   )
 }
