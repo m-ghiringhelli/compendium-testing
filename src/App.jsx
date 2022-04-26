@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import QuoteCard from "./components/QuoteCard/QuoteCard";
-import { getQuotes } from "./services/quotes";
+import { getQuotes, getQuotesByCharacter } from "./services/quotes";
 import Select from './components/Select/Select';
 import style from './App.css';
 
 export default function App() {
+  const [quoteNames, setQuoteNames] = useState([]);
+  const [quotes, setQuotes] = useState([]);
   const [names, setNames] = useState([]);
   const [character, setCharacter] = useState('');
-  const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -15,7 +16,8 @@ export default function App() {
     const getData = async () => {
       try {
         const data = await getQuotes();
-        setQuotes(data);
+        setQuoteNames(data);
+        !character && setQuotes(data);
         setLoading(false);
       } catch (error) {
         setErrorMessage(error.message);
@@ -28,14 +30,21 @@ export default function App() {
   useEffect(() => {
     const createNames = () => {
       const nameList = [...new Set(
-        quotes.map((quote) => (quote.character)
+        quoteNames.map((quote) => (quote.character)
       ))];
-      console.log(nameList);
       setNames(nameList);
     }
     createNames();
-  }, [quotes]);
+  }, [quoteNames]);
  
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getQuotesByCharacter(character);
+      (character && (character !== 'All')) ? setQuotes(data) : setQuotes(quoteNames);
+    }
+    getData();
+  }, [character]);
+
   if (loading) return <p>loading...</p>;
 
   return (
