@@ -1,11 +1,26 @@
 .quoteCard {
     display: flex;
     flex-direction: column;
-    color: red;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.quoteCard p {
+    padding: 10px;
+    border: 3px solid black;
+    border-radius: 10px;
 }
 
 .quoteCard img {
     width: 200px;
     height: 200px;
     border: 1px solid red;
+}
+
+.quoteCard h2 {
+    font-size: 2rem;
 }
