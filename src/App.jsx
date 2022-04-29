@@ -5,18 +5,17 @@ import Select from './components/Select/Select';
 import style from './App.css';
 
 export default function App() {
-  const [quoteNames, setQuoteNames] = useState([]);
-  const [quotes, setQuotes] = useState([]);
-  const [names, setNames] = useState([]);
-  const [character, setCharacter] = useState('');
+  const [quotes, setQuotes] = useState([]); // array of quotes to display
+  const [names, setNames] = useState([]); // names of characters derived from quote data
+  const [character, setCharacter] = useState(''); // selected character
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-
+  
+  // load all quotes and set initial display
   useEffect(() => {
     const getData = async () => {
       try {
         const data = await getQuotes();
-        setQuoteNames(data);
         !character && setQuotes(data);
         setLoading(false);
       } catch (error) {
@@ -27,20 +26,26 @@ export default function App() {
     getData();
   }, []);
   
+  // set values for dropdown
   useEffect(() => {
-    const createNames = () => {
+    const getNames = async () => {
+      const data = await getQuotes();
       const nameList = [...new Set(
-        quoteNames.map((quote) => (quote.character)
-      ))];
+          data.map((quote) => (quote.character)
+          )
+      )];
       setNames(nameList);
     }
-    createNames();
-  }, [quoteNames]);
+    getNames();
+  }, []);
  
+  // update array of quotes when select changes
   useEffect(() => {
     const getData = async () => {
-      const data = await getQuotesByCharacter(character);
-      (character && (character !== 'All')) ? setQuotes(data) : setQuotes(quoteNames);
+      const data = (character === 'All') ? 
+        await getQuotes() : 
+        await getQuotesByCharacter(character);
+      setQuotes(data);
     }
     getData();
   }, [character]);
